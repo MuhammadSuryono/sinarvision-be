@@ -23,7 +23,7 @@ func (p *PostHandler) HandleCreate(c *gin.Context) {
 	if errCreate != nil {
 		c.JSON(http.StatusBadRequest, models.CommonResponse{
 			IsSuccess: false,
-			Message:   "Parameter request can't empty",
+			Message:   "Error create : " + errCreate.Error(),
 			Data:      paramCreate,
 		})
 		return
