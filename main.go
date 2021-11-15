@@ -43,11 +43,11 @@ func main() {
 	articleHandler := posts.NewPostHandler()
 	v1 := r.Group("/article")
 	{
-		v1.GET("", articleHandler.HandleListPost)
+		v1.GET("/:limit/:offset", articleHandler.HandleListPost)
 		v1.GET("/count", articleHandler.HandleCountStatus)
-		v1.POST("", articleHandler.HandleCreate)
-		v1.GET("/:id", articleHandler.HandleReadPost)
-		v1.PUT("/:id", articleHandler.HandleUpdate)
+		v1.POST("", articleHandler.CreateAbleValidator, articleHandler.HandleCreate)
+		v1.GET("/detail/:id", articleHandler.HandleReadPost)
+		v1.PUT("/:id", articleHandler.UpdateAbleValidator, articleHandler.HandleUpdate)
 		v1.DELETE("/:id", articleHandler.HandleDelete)
 	}
 
