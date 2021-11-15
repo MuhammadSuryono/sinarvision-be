@@ -11,12 +11,12 @@ func GetPostByID(postId int64) (post Post) {
 	return
 }
 
-func (q QueryRequest) AllPostList(paramSearch ParameterSearchPost) *pagination.Paginator {
+func (uriArticle UriPaging) AllPostList(paramSearch ParameterSearchPost) *pagination.Paginator {
 	query := paramSearch.queryAllPost()
 	paginator := pagination.Paging(&pagination.Param{
 		DB:      query,
-		Page:    q.Page,
-		Limit:   q.Size,
+		Limit:   int(uriArticle.Limit),
+		Offset:  int(uriArticle.Offset),
 		OrderBy: []string{"id desc"},
 		ShowSQL: true,
 	}, &[]Post{})

@@ -8,16 +8,8 @@ import (
 )
 
 func (p *PostHandler) HandleCreate(c *gin.Context) {
-	var paramCreate posts.ParameterCreatePost
-	err := c.BindJSON(&paramCreate)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, models.CommonResponse{
-			IsSuccess: false,
-			Message:   "Parameter request can't empty",
-			Data:      paramCreate,
-		})
-		return
-	}
+	validated, _ := c.Get("validated_input")
+	paramCreate := validated.(posts.ParameterCreatePost)
 
 	errCreate := paramCreate.CreateNewPost()
 	if errCreate != nil {

@@ -8,12 +8,12 @@ import (
 )
 
 func (p *PostHandler) HandleListPost(c *gin.Context) {
-	var queryPagination posts.QueryRequest
 	var querySearch posts.ParameterSearchPost
-	_ = c.BindQuery(&queryPagination)
+	var uriArticle posts.UriPaging
 	_ = c.BindQuery(&querySearch)
+	_ = c.BindUri(&uriArticle)
 
-	data := queryPagination.AllPostList(querySearch)
+	data := uriArticle.AllPostList(querySearch)
 	c.JSON(http.StatusOK, models.CommonResponse{
 		IsSuccess: true,
 		Message:   "Success retrieve data",
@@ -22,13 +22,13 @@ func (p *PostHandler) HandleListPost(c *gin.Context) {
 }
 
 func (p *PostHandler) HandleListPostPublish(c *gin.Context) {
-	var queryPagination posts.QueryRequest
 	var querySearch posts.ParameterSearchPost
-	_ = c.BindQuery(&queryPagination)
+	var uriArticle posts.UriPaging
 	_ = c.BindQuery(&querySearch)
+	_ = c.BindUri(&uriArticle)
 
 	querySearch.Status = "publish"
-	data := queryPagination.AllPostList(querySearch)
+	data := uriArticle.AllPostList(querySearch)
 	c.JSON(http.StatusOK, models.CommonResponse{
 		IsSuccess: true,
 		Message:   "Success retrieve data",

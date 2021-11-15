@@ -48,6 +48,11 @@ type UriPost struct {
 	Id int64 `uri:"id"`
 }
 
+type UriPaging struct {
+	Limit  int64 `uri:"limit"`
+	Offset int64 `uri:"offset"`
+}
+
 type QueryRequest struct {
 	Page int `form:"page"`
 	Size int `form:"size"`

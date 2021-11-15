@@ -8,18 +8,11 @@ import (
 )
 
 func (p *PostHandler) HandleUpdate(c *gin.Context) {
-	var paramUpdate posts.ParameterUpdatePost
+	validated, _ := c.Get("validated_input")
+	paramUpdate := validated.(posts.ParameterUpdatePost)
+
 	var uri posts.UriPost
 	_ = c.BindUri(&uri)
-	err := c.BindJSON(&paramUpdate)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, models.CommonResponse{
-			IsSuccess: false,
-			Message:   "Parameter request can't empty",
-			Data:      paramUpdate,
-		})
-		return
-	}
 
 	errCreate := paramUpdate.UpdatePost(uri.Id)
 	if errCreate != nil {

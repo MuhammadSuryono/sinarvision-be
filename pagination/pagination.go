@@ -8,8 +8,8 @@ import (
 
 type Param struct {
 	DB      *gorm.DB
-	Page    int
 	Limit   int
+	Offset  int
 	OrderBy []string
 	ShowSQL bool
 }
@@ -28,9 +28,6 @@ type Paginator struct {
 func Paging(p *Param, result interface{}) *Paginator {
 	db := p.DB
 
-	if p.Page < 1 {
-		p.Page = 1
-	}
 	if p.Limit == 0 {
 		p.Limit = 10
 	}
@@ -44,37 +41,40 @@ func Paging(p *Param, result interface{}) *Paginator {
 	var paginator Paginator
 	var count int64
 	var offset int
+	var page int
 
 	go countRecords(db, result, done, &count)
 
-	if p.Page == 1 {
-		offset = 0
-	} else {
-		offset = (p.Page - 1) * p.Limit
-	}
+	offset = p.Offset
 
 	db.Debug().Limit(p.Limit).Offset(offset).Find(result)
 
 	<-done
 
+	if offset == 0 {
+		page = 1
+	} else {
+		page = 2
+	}
+
 	paginator.TotalRecord = count
 	paginator.Records = result
-	paginator.Page = p.Page
+	paginator.Page = page
 
 	paginator.Offset = offset
 	paginator.Limit = p.Limit
 	paginator.TotalPage = int(math.Ceil(float64(count) / float64(p.Limit)))
 
-	if p.Page > 1 {
-		paginator.PrevPage = p.Page - 1
+	if page > 1 {
+		paginator.PrevPage = page - 1
 	} else {
-		paginator.PrevPage = p.Page
+		paginator.PrevPage = page
 	}
 
-	if p.Page == paginator.TotalPage {
-		paginator.NextPage = p.Page
+	if page == paginator.TotalPage {
+		paginator.NextPage = page
 	} else {
-		paginator.NextPage = p.Page + 1
+		paginator.NextPage = page + 1
 	}
 	return &paginator
 }

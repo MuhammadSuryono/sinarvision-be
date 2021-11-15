@@ -10,6 +10,8 @@ type IPost interface {
 	HandleListPostPublish(c *gin.Context)
 	HandleReadPost(c *gin.Context)
 	HandleCountStatus(c *gin.Context)
+	CreateAbleValidator(c *gin.Context)
+	UpdateAbleValidator(c *gin.Context)
 }
 
 type PostHandler struct {
